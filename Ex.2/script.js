@@ -1,44 +1,52 @@
-function myForEach(array, callback, thisArg) {
-	for (let i = 0; i < array.length; i++) {
-		callback.call(thisArg, array[i], i, array);
+Array.prototype.myForEach = function(callback) {
+	for (let i = 0; i < this.length; i++) {
+		callback(this[i], i, this);
 	}
 }
 
-function myMap(array, callback, thisArg) {
+Array.prototype.myMap = function(callback) {
 	let newArray = [];
-	for (let i = 0; i < array.length; i++) {
-		newArray.push(callback.call(thisArg, array[i], i, array));
+	for (let i = 0; i < this.length; i++) {
+		newArray.push(callback(this[i], i, this));
 	}
 	return newArray;
 }
 
-function mySort(array, callback) { //method where sorting is used and the callback function is checked
-	if (!arguments[1]) {
-		for (let i = 0; i < array.length; i++) {
-			array[i] = array[i].toString();
+Array.prototype.mySort = function(callback) { //method where sorting is used and the callback function is checked
+	if (arguments.length === 0) { //convert array to string
+		for (let i = 0; i < this.length; i++) {
+			this[i] = this[i].toString();
 		}
-		sortMyArray(array);
+		for (let i = 1, l = this.length; i < l; i++) {
+			let current = this[i];
+			let j = i;
+			while (j > 0 && this[j - 1] > current) {
+				this[j] = this[j - 1];
+				j--;
+			}
+			this[j] = current;
+		}
+		for (let i = 0; i < this.length; i++) { //types conversion
+			if (!isNaN(this[i]))
+				this[i] = +this[i];
+		}
 	} else {
 		let result = callback(1, 0);
-		sortMyArray(array);
+		for (let i = 1, l = this.length; i < l; i++) {
+			let current = this[i];
+			let j = i;
+			while (j > 0 && this[j - 1] > current) {
+				this[j] = this[j - 1];
+				j--;
+			}
+			this[j] = current;
+		}
+		for (let i = 0; i < this.length; i++) { //types conversion
+			if (!isNaN(this[i]))
+				this[i] = +this[i];
+		}
 		if (result < 0) {
-			array.reverse();
+			this.reverse();
 		}
-	}
-}
-
-function sortMyArray(array) { //Sort method
-	for (let i = 1, l = array.length; i < l; i++) {
-		let current = array[i];
-		let j = i;
-		while (j > 0 && array[j - 1] > current) {
-			array[j] = array[j - 1];
-			j--;
-		}
-		array[j] = current;
-	}
-	for (let i = 0; i < array.length; i++) { //types conversion
-		if (!isNaN(array[i]))
-			array[i] = +array[i];
 	}
 }
